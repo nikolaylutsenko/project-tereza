@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Automapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Project.Tereza.Responses\Project.Tereza.Responses.csproj" />
+    <ProjectReference Include="..\Project.Tereza.Core\Project.Tereza.Core.csproj" />
   </ItemGroup>
 
 </Project>
