@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Project.Tereza.Responses\Project.Tereza.Responses.csproj" />
     <ProjectReference Include="..\Project.Tereza.Core\Project.Tereza.Core.csproj" />
+    <ProjectReference Include="..\Project.Tereza.Requests\Project.Tereza.Requests.csproj" />
   </ItemGroup>
 
 </Project>

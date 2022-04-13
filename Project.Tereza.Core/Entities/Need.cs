@@ -16,8 +16,9 @@ public class Need : BaseEntity
 
     }
 
-    public Need(string name, string description, int count, bool isCovered)
+    public Need(string id, string name, string description, int count, bool isCovered)
     {
+        Id = Guid.Parse(id);
         Name = name;
         Description = description;
         Count = count;
