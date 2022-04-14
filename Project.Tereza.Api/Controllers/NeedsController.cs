@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Project.Tereza.Core;
 using Project.Tereza.Requests;
 using Project.Tereza.Responses;
+using Serilog;
 
 namespace Project.Tereza.Api.Controllers
 {
@@ -14,6 +15,7 @@ namespace Project.Tereza.Api.Controllers
     [Route("api/[controller]")]
     public class NeedsController : ControllerBase
     {
+        private readonly Serilog.ILogger _logger;
         private static readonly List<Need> _needs = new List<Need>
             {
                 new("82d257a5-d72b-4f08-bcf2-76ebdc958b5f", "Laptop", "Need laptop for working needs.", 1, false),
@@ -22,14 +24,17 @@ namespace Project.Tereza.Api.Controllers
             };
         private readonly IMapper _mapper;
 
-        public NeedsController(IMapper mapper)
+        public NeedsController(IMapper mapper, Serilog.ILogger logger)
         {
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NeedResponse>>> GetAllNeedsAsync()
         {
+            _logger.Information($"Successfully run {nameof(GetAllNeedsAsync)}");
+
             return await Task.Factory.StartNew(() => _mapper.Map<List<NeedResponse>>(_needs));
         }
 
