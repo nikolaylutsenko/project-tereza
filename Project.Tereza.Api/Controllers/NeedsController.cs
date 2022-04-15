@@ -43,7 +43,9 @@ namespace Project.Tereza.Api.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<NeedResponse>> GetNeedByIdAsync(Guid id)
         {
-            return await Task.Factory.StartNew(() => _mapper.Map<NeedResponse>(_needs.First(x => x.Id == id)));
+            var need = await _needService.GetAsync(id);
+
+            return Ok(_mapper.Map<NeedResponse>(need));
         }
 
         [HttpPost]
@@ -52,7 +54,7 @@ namespace Project.Tereza.Api.Controllers
             // here must be validation
             var need = _mapper.Map<Need>(request);
 
-            await Task.Factory.StartNew(() => _needs.Add(need));
+            await _needService.AddAsync(need);
 
             return Results.Created($"/needs/{need.Id}", need);
         }
@@ -60,7 +62,7 @@ namespace Project.Tereza.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IResult> UpdateNeedAsync(Guid id, UpdateNeedRequest request)
         {
-            var oldNeed = _needs.FirstOrDefault(x => x.Id == id);
+            var oldNeed = await _needService.GetAsync(id);
 
             if (oldNeed is null)
             {
@@ -71,7 +73,7 @@ namespace Project.Tereza.Api.Controllers
 
             var updatedNeed = _mapper.Map(request, oldNeed);
 
-            await Task.Factory.StartNew(() => (_needs[_needs.IndexOf(oldNeed)] = updatedNeed));
+            await _needService.UpdateAsync(updatedNeed);
 
             return Results.NoContent();
         }
@@ -79,14 +81,14 @@ namespace Project.Tereza.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IResult> DeleteNeedAsync(Guid id)
         {
-            var need = _needs.FirstOrDefault(x => x.Id == id);
+            var need = await _needService.GetAsync(id);
 
             if (need is null)
             {
                 return Results.NotFound();
             }
 
-            await Task.Factory.StartNew(() => _needs.ToList().Remove(need));
+            await _needService.DeleteAsync(need);
 
             return Results.NoContent();
         }
