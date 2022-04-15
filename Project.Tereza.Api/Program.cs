@@ -1,4 +1,10 @@
+using Microsoft.VisualBasic.CompilerServices;
 using Serilog;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Project.Tereza.Infrastructure.DBContext;
+using Project.Tereza.Core.Interfaces;
+using Project.Tereza.Services;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -10,9 +16,23 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((ctx, lc) => lc
-        .WriteTo.Console()
-        .ReadFrom.Configuration(ctx.Configuration));
+    builder.Host.UseSerilog((context, services, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console());
+
+    // secret -> connection string
+    var connectionString = builder.Configuration["PostgreSQL:ConnectionString"];
+
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        options.UseNpgsql(connectionString).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    });
+
+    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+    builder.Services.AddTransient(typeof(IService<>), typeof(Service<>));
 
     // Add services to the container.
     // set url to lowercase

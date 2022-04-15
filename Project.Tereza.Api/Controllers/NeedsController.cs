@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Project.Tereza.Core;
+using Project.Tereza.Core.Interfaces;
 using Project.Tereza.Requests;
 using Project.Tereza.Responses;
-using Serilog;
 
 namespace Project.Tereza.Api.Controllers
 {
@@ -15,6 +15,7 @@ namespace Project.Tereza.Api.Controllers
     [Route("api/[controller]")]
     public class NeedsController : ControllerBase
     {
+        private readonly IService<Need> _needService;
         private readonly Serilog.ILogger _logger;
         private static readonly List<Need> _needs = new List<Need>
             {
@@ -24,18 +25,19 @@ namespace Project.Tereza.Api.Controllers
             };
         private readonly IMapper _mapper;
 
-        public NeedsController(IMapper mapper, Serilog.ILogger logger)
+        public NeedsController(IMapper mapper, Serilog.ILogger logger, IService<Need> needService)
         {
             _mapper = mapper;
             _logger = logger;
+            _needService = needService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NeedResponse>>> GetAllNeedsAsync()
         {
-            _logger.Information($"Successfully run {nameof(GetAllNeedsAsync)}");
+            var needs = await _needService.GetAllAsync();
 
-            return await Task.Factory.StartNew(() => _mapper.Map<List<NeedResponse>>(_needs));
+            return Ok(_mapper.Map<IEnumerable<NeedResponse>>(needs));
         }
 
         [HttpGet("{id:guid}")]
