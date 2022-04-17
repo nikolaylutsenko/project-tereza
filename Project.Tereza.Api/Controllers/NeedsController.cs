@@ -43,24 +43,24 @@ namespace Project.Tereza.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IResult> AddNeedAsync(AddNeedRequest request)
+        public async Task<IActionResult> AddNeedAsync(AddNeedRequest request)
         {
             // here must be validation
             var need = _mapper.Map<Need>(request);
 
             await _needService.AddAsync(need);
 
-            return Results.Created($"/needs/{need.Id}", need);
+            return Created($"/needs/{need.Id}", need);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IResult> UpdateNeedAsync(Guid id, UpdateNeedRequest request)
+        public async Task<IActionResult> UpdateNeedAsync(Guid id, UpdateNeedRequest request)
         {
             var oldNeed = await _needService.GetAsync(id);
 
             if (oldNeed is null)
             {
-                return Results.NotFound();
+                return NotFound();
             }
 
             // here must be validation
@@ -69,22 +69,22 @@ namespace Project.Tereza.Api.Controllers
 
             await _needService.UpdateAsync(updatedNeed);
 
-            return Results.NoContent();
+            return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<IResult> DeleteNeedAsync(Guid id)
+        public async Task<IActionResult> DeleteNeedAsync(Guid id)
         {
             var need = await _needService.GetAsync(id);
 
             if (need is null)
             {
-                return Results.NotFound();
+                return NotFound();
             }
 
             await _needService.DeleteAsync(need);
 
-            return Results.NoContent();
+            return NoContent();
         }
     }
 }
