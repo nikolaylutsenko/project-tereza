@@ -6,7 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Project.Tereza.Core;
 using Project.Tereza.Core.Interfaces;
-using Project.Tereza.Requests;
+using Project.Tereza.Requests.Requests;
 using Project.Tereza.Responses;
 
 namespace Project.Tereza.Api.Controllers

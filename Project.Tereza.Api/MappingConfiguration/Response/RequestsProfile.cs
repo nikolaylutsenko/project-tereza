@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Project.Tereza.Core;
-using Project.Tereza.Requests;
+using Project.Tereza.Requests.Requests;
 
 namespace Project.Tereza.Api.MappingConfiguration.Response
 {
