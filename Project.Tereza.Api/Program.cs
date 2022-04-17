@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Project.Tereza.Infrastructure.DBContext;
 using Project.Tereza.Core.Interfaces;
 using Project.Tereza.Services;
+using FluentValidation;
+using Project.Tereza.Requests.Requests;
+using Project.Tereza.Requests.Validators;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -32,7 +35,11 @@ try
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+    // inject services
     builder.Services.AddTransient(typeof(IService<>), typeof(Service<>));
+
+    // inject validators
+    InjectValidators(builder);
 
     // Add services to the container.
     // set url to lowercase
@@ -69,4 +76,10 @@ finally
 {
     Log.Information("Shut down complete");
     Log.CloseAndFlush();
+}
+
+void InjectValidators(WebApplicationBuilder builder)
+{
+    builder.Services.AddTransient<AddNeedRequestValidator>();
+    builder.Services.AddTransient<UpdateNeedRequestValidator>();
 }
