@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
 using Project.Tereza.Core;
-using Project.Tereza.Responses;
 using Project.Tereza.Responses.Responses;
 
 namespace Project.Tereza.Api.MappingConfiguration.Response
