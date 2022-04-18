@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using AutoMapper;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using Project.Tereza.Core.Entities;
@@ -54,7 +49,7 @@ namespace Project.Tereza.Services
             return result;
         }
 
-        public async Task<Result> AddAsync(T item)
+        public async Task<Result<T>> AddAsync(T item)
         {
             var result = Result.Fail(string.Empty);
 
