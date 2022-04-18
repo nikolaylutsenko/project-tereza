@@ -36,7 +36,20 @@ namespace Project.Tereza.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NeedResponse>>> GetAllNeedsAsync()
         {
-            var needs = await _needService.GetAllAsync();
+            var fluentResult = await _needService.GetAllAsync();
+
+            if (fluentResult.IsFailed)
+            {
+                var errors = new List<ErrorResponse>();
+                foreach (var error in fluentResult.Errors)
+                {
+                    errors.Add(new ErrorResponse(error.Message));
+                }
+
+                return BadRequest(errors); // todo: is it valid?
+            }
+
+            var needs = fluentResult.Value;
 
             return Ok(_mapper.Map<IEnumerable<NeedResponse>>(needs));
         }
@@ -44,13 +57,20 @@ namespace Project.Tereza.Api.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<NeedResponse>> GetNeedByIdAsync(Guid id)
         {
-            var need = await _needService.GetAsync(id);
+            var fluentResult = await _needService.GetAsync(id);
 
-            if (need is null)
+            if (fluentResult.IsFailed)
             {
-                var errors = new List<ErrorResponse> { new ErrorResponse($"Item with id {id} not found.") };
+                var errors = new List<ErrorResponse>();
+                foreach (var error in fluentResult.Errors)
+                {
+                    errors.Add(new ErrorResponse(error.Message));
+                }
+
                 return BadRequest(errors);
             }
+
+            var need = fluentResult.Value;
 
             return Ok(_mapper.Map<NeedResponse>(need));
         }
@@ -76,13 +96,21 @@ namespace Project.Tereza.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateNeedAsync(Guid id, UpdateNeedRequest request)
         {
-            var oldNeed = await _needService.GetAsync(id);
+            var fluentResult = await _needService.GetAsync(id);
 
-            if (oldNeed is null)
+            if (fluentResult.IsFailed)
             {
-                var errors = new List<ErrorResponse> { new ErrorResponse($"Item with id {id} not found.") };
+                var errors = new List<ErrorResponse>();
+
+                foreach (var error in fluentResult.Errors)
+                {
+                    errors.Add(new ErrorResponse(error.Message));
+                }
+
                 return NotFound(errors);
             }
+
+            var oldNeed = fluentResult.Value;
 
             var validationResults = await _updateNeedRequestValidator.ValidateAsync(request);
 
@@ -102,13 +130,20 @@ namespace Project.Tereza.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteNeedAsync(Guid id)
         {
-            var need = await _needService.GetAsync(id);
+            var fluentResult = await _needService.GetAsync(id);
 
-            if (need is null)
+            if (fluentResult.IsFailed)
             {
-                var errors = new List<ErrorResponse> { new ErrorResponse($"Item with id {id} not found.") };
+                var errors = new List<ErrorResponse>();
+                foreach (var error in fluentResult.Errors)
+                {
+                    errors.Add(new ErrorResponse(error.Message));
+                }
+
                 return NotFound(errors);
             }
+
+            var need = fluentResult.Value;
 
             await _needService.DeleteAsync(need);
 
