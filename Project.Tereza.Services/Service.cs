@@ -21,19 +21,20 @@ namespace Project.Tereza.Services
             _logger = logger;
         }
 
-        public async Task<T> GetAsync(Guid id)
+        public async Task<Result<T>> GetAsync(Guid id)
         {
             var item = await _dbSet.FindAsync(id);
 
             if (item is null)
             {
                 _logger.Error($"Item with id {id} not found");
+                return Result.Fail($"Item with id {id} not found");
             }
 
-            return item;
+            return Result.Ok(item);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> properties = null)
+        public async Task<Result<IEnumerable<T>>> GetAllAsync(Expression<Func<T, bool>>? properties = null)
         {
             IEnumerable<T> result = Enumerable.Empty<T>();
 
@@ -44,12 +45,13 @@ namespace Project.Tereza.Services
             catch (Exception ex)
             {
                 _logger.Error($"Exception has been appeared in {nameof(GetAllAsync)} - {ex.Message}");
+                return Result.Fail(ex.Message);
             }
 
-            return result;
+            return Result.Ok(result);
         }
 
-        public async Task<Result<T>> AddAsync(T item)
+        public async Task<Result> AddAsync(T item)
         {
             var result = Result.Fail(string.Empty);
 
