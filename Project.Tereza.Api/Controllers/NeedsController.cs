@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MDEvents.Services.Specification;
+using MDEvents.Services.Specification.SpecificationParameters;
 using Microsoft.AspNetCore.Mvc;
 using Project.Tereza.Core;
 using Project.Tereza.Core.Interfaces;
 using Project.Tereza.Requests.Requests;
+using Project.Tereza.Requests.Requests.Specifications;
 using Project.Tereza.Requests.Validators;
+using Project.Tereza.Requests.Validators.Specifications;
 using Project.Tereza.Responses;
 using Project.Tereza.Responses.Responses;
+using Project.Tereza.Responses.Responses.Paged;
 
 namespace Project.Tereza.Api.Controllers
 {
@@ -20,23 +25,38 @@ namespace Project.Tereza.Api.Controllers
         private readonly IService<Need> _needService;
         private readonly AddNeedRequestValidator _addNeedRequestValidator;
         private readonly UpdateNeedRequestValidator _updateNeedRequestValidator;
+        private readonly NeedSpecificationRequestValidator _needSpecificationRequestValidator;
         private readonly Serilog.ILogger _logger;
         private readonly IMapper _mapper;
 
         public NeedsController(IMapper mapper, Serilog.ILogger logger, IService<Need> needService,
-             AddNeedRequestValidator addNeedRequestValidator, UpdateNeedRequestValidator updateNeedRequestValidator)
+             AddNeedRequestValidator addNeedRequestValidator, UpdateNeedRequestValidator updateNeedRequestValidator,
+             NeedSpecificationRequestValidator needSpecificationRequestValidator)
         {
             _mapper = mapper;
             _logger = logger;
             _needService = needService;
             _addNeedRequestValidator = addNeedRequestValidator;
             _updateNeedRequestValidator = updateNeedRequestValidator;
+            _needSpecificationRequestValidator = needSpecificationRequestValidator;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<NeedResponse>>> GetAllNeedsAsync()
+        public async Task<ActionResult<PagedResponse<Need>>> GetAllNeedsAsync([FromQuery] NeedSpecificationRequest specificationRequest)
         {
-            var fluentResult = await _needService.GetAllAsync();
+
+            var validationResults = await _needSpecificationRequestValidator.ValidateAsync(specificationRequest);
+
+            if (!validationResults.IsValid)
+            {
+                return BadRequest(_mapper.Map<IEnumerable<ErrorResponse>>(validationResults.Errors));
+            }
+
+            var specificationParameters = _mapper.Map<SpecificationParameters<Need>>(specificationRequest);
+
+            var specification = new NeedSpecification(specificationParameters);
+
+            var fluentResult = await _needService.FindAsync(specification);
 
             if (fluentResult.IsFailed)
             {
@@ -49,9 +69,9 @@ namespace Project.Tereza.Api.Controllers
                 return BadRequest(errors); // todo: is it valid?
             }
 
-            var needs = fluentResult.Value;
+            var (items, count) = fluentResult.Value;
 
-            return Ok(_mapper.Map<IEnumerable<NeedResponse>>(needs));
+            return Ok(new PagedResponse<NeedResponse> { Skip = specificationRequest.Skip, Take = specificationRequest.Take, TotalItems = count, Data = _mapper.Map<IEnumerable<NeedResponse>>(items) });
         }
 
         [HttpGet("{id:guid}")]
