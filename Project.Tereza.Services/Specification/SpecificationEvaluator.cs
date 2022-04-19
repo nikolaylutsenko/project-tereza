@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using MDEvents.Core.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Project.Tereza.Core.Interfaces;
 
 namespace MDEvents.Services.Specification
 {
-    public static class SpecificationEvaluator<TEntity> where TEntity : class
+    public static class SpecificationEvaluator<T> where T : class
     {
-        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> specification)
+        public static IQueryable<T>? GetQuery(IQueryable<T>? inputQuery, ISpecification<T> specification)
         {
             var query = inputQuery;
 
@@ -15,17 +13,17 @@ namespace MDEvents.Services.Specification
                 query = query.Where(specification.Criteria);
             }
 
-            if (specification.Skip != null && specification.Take != null)
+            if (specification?.Skip != null && specification?.Take != null)
             {
-                query = query
+                query = query?
                     .Skip(specification.Skip)
                     .Take(specification.Take);
             }
 
             return query;
         }
-        
-        public static (IQueryable<TEntity>, int) GetTupleQueryInt(IQueryable<TEntity> inputQuery, ISpecification<TEntity> specification)
+
+        public static (IQueryable<T>, int) GetTupleQueryInt(IQueryable<T> inputQuery, ISpecification<T> specification)
         {
             var query = inputQuery;
             var count = 0;
@@ -37,7 +35,7 @@ namespace MDEvents.Services.Specification
 
             count = query.Count();
 
-            if (specification.Skip != null && specification.Take != null)
+            if (specification?.Skip != null && specification?.Take != null)
             {
                 query = query
                     .Skip(specification.Skip)
