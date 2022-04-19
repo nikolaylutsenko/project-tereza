@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using FluentResults;
+using MDEvents.Services.Specification;
 using Microsoft.EntityFrameworkCore;
 using Project.Tereza.Core.Entities;
 using Project.Tereza.Core.Interfaces;
@@ -127,6 +128,45 @@ namespace Project.Tereza.Services
             }
 
             return result;
+        }
+
+        public async Task<Result<(IEnumerable<T> items, int count)>> FindAsync(ISpecification<T>? specification = null, string? includes = null)
+        {
+            (IQueryable<T>? items, int count) tuple = (null, 0);
+
+            try
+            {
+                IQueryable<T> items = _context.Set<T>();
+
+                if (!string.IsNullOrEmpty(includes))
+                {
+                    var listOfIncludes = includes.Split(';').ToList();
+                    foreach (var includeItem in listOfIncludes)
+                    {
+                        items = items.Include(includeItem);
+                    }
+
+                    items = items.AsQueryable();
+                }
+
+                // if specification is null it mean that we need entire list of entities
+                if (specification is null)
+                {
+                    return Result.Ok<(IEnumerable<T> items, int count)>(new(items, items.Count()));
+                }
+
+                tuple = SpecificationEvaluator<T>.GetTupleQueryInt(items, specification);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+
+                return Result.Fail(ex.Message);
+            }
+
+            var resul = await tuple.items.ToListAsync();
+
+            return Result.Ok<(IEnumerable<T> items, int count)>((resul, tuple.count));
         }
     }
 }

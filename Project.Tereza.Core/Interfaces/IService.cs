@@ -10,5 +10,6 @@ namespace Project.Tereza.Core.Interfaces
         Task<Result> AddAsync(T item);
         Task<Result> UpdateAsync(T item);
         Task<Result> DeleteAsync(T item);
+        Task<Result<(IEnumerable<T> items, int count)>> FindAsync(ISpecification<T>? specification = null, string? includes = null);
     }
 }
