@@ -8,6 +8,7 @@ using Project.Tereza.Services;
 using FluentValidation;
 using Project.Tereza.Requests.Requests;
 using Project.Tereza.Requests.Validators;
+using Project.Tereza.Requests.Validators.Specifications;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -82,4 +83,7 @@ void InjectValidators(WebApplicationBuilder builder)
 {
     builder.Services.AddTransient<AddNeedRequestValidator>();
     builder.Services.AddTransient<UpdateNeedRequestValidator>();
+
+    // specification validators
+    builder.Services.AddTransient<NeedSpecificationRequestValidator>();
 }
