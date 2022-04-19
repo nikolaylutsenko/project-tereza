@@ -4,9 +4,9 @@ using Project.Tereza.Services.Helpers;
 
 namespace MDEvents.Services.Specification
 {
-    public class PlaceSpecification : BaseSpecification<Need>
+    public class NeedSpecification : BaseSpecification<Need>
     {
-        public PlaceSpecification(SpecificationParameters<Need> parameters)
+        public NeedSpecification(SpecificationParameters<Need> parameters)
         {
             Skip = parameters.Skip;
             Take = parameters.Take;
