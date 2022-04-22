@@ -43,7 +43,7 @@ public class NeedsControllerTests
     }
 
     [Test]
-    public async Task Test1()
+    public async Task GetAllNeedsAsync_PassRightRequest_GetRightResponse()
     {
         // Arrange
         var needSpecificationRequest = TestingEntities.GetNeedSpecificationRequest;
