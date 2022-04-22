@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Tereza.Services", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Tereza.Settings", "Project.Tereza.Settings\Project.Tereza.Settings.csproj", "{0E556149-701E-4F56-A6BB-2F1CE64A48D3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project.Tereza.Tests", "Project.Tereza.Tests", "{4AFCFACE-7791-499C-BF27-432BD6AF6D05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Tereza.Api.Tests", "Project.Tereza.Tests\Project.Tereza.Api.Tests\Project.Tereza.Api.Tests.csproj", "{0C39B876-0429-4063-8BE8-B699728134AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +58,12 @@ Global
 		{0E556149-701E-4F56-A6BB-2F1CE64A48D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E556149-701E-4F56-A6BB-2F1CE64A48D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E556149-701E-4F56-A6BB-2F1CE64A48D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C39B876-0429-4063-8BE8-B699728134AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C39B876-0429-4063-8BE8-B699728134AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C39B876-0429-4063-8BE8-B699728134AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C39B876-0429-4063-8BE8-B699728134AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0C39B876-0429-4063-8BE8-B699728134AD} = {4AFCFACE-7791-499C-BF27-432BD6AF6D05}
 	EndGlobalSection
 EndGlobal

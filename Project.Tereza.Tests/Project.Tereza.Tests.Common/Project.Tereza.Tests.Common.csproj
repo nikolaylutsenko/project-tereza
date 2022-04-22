@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0"/>
+    <PackageReference Include="Moq" Version="4.17.2"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Project.Tereza.Settings\Project.Tereza.Settings.csproj"/>
+    <ProjectReference Include="..\..\Project.Tereza.Services\Project.Tereza.Services.csproj"/>
+    <ProjectReference Include="..\..\Project.Tereza.Responses\Project.Tereza.Responses.csproj"/>
+    <ProjectReference Include="..\..\Project.Tereza.Infrastructure\Project.Tereza.Infrastructure.csproj"/>
+    <ProjectReference Include="..\..\Project.Tereza.Requests\Project.Tereza.Requests.csproj"/>
+    <ProjectReference Include="..\..\Project.Tereza.Core\Project.Tereza.Core.csproj"/>
+    <ProjectReference Include="..\..\Project.Tereza.Api\Project.Tereza.Api.csproj"/>
+  </ItemGroup>
+</Project>
