@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0"/>
     <PackageReference Include="Moq" Version="4.17.2"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Project.Tereza.Settings\Project.Tereza.Settings.csproj"/>
