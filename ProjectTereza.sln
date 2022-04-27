@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Tereza.Responses", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Tereza.Services", "Project.Tereza.Services\Project.Tereza.Services.csproj", "{D777C78B-ABC1-4F8E-B6D0-58D8EA3177C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Tereza.Settings", "Project.Tereza.Settings\Project.Tereza.Settings.csproj", "{0E556149-701E-4F56-A6BB-2F1CE64A48D3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
